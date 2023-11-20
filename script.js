@@ -202,117 +202,173 @@
 // Regular Functions vs. Arrow Functions
 ///////////////////////////////////////////////////
 
-// var firstName = 'Matilda';// Not using var
+// // var firstName = 'Matilda';// Not using var
 
-const elmar = {
-  firstName: 'Elmar',
-  year: 1991,
-  calcAge: function () {
-    // console.log(this);
-    console.log(2037 - this.year);
+// const elmar = {
+//   firstName: 'Elmar',
+//   year: 1991,
+//   calcAge: function () {
+//     // console.log(this);
+//     console.log(2037 - this.year);
 
-    //solution 1
-    // const self = this; // self or that
-    // const isMillenial = function () {
-    //   console.log(self);
-    //   console.log(self.year >= 1981 && self.year <= 1996);
-    //   // console.log(this.year >= 1981 && this.year <= 1996);
-    // };
+//     //solution 1
+//     // const self = this; // self or that
+//     // const isMillenial = function () {
+//     //   console.log(self);
+//     //   console.log(self.year >= 1981 && self.year <= 1996);
+//     //   // console.log(this.year >= 1981 && this.year <= 1996);
+//     // };
 
-    //solution 2
-    const isMillenial = () => {
-      console.log(this);
-      console.log(this.year >= 1981 && this.year <= 1996);
-    };
+//     //solution 2
+//     const isMillenial = () => {
+//       console.log(this);
+//       console.log(this.year >= 1981 && this.year <= 1996);
+//     };
 
-    isMillenial();
-  },
+//     isMillenial();
+//   },
 
-  greet: () => {
-    console.log(this);
-    console.log(`Hey ${this.firstName}`);
-  },
-  // greet: function () {
-  //   console.log(this);
-  //   console.log(`Hey ${this.firstName}`);
-  // },
+//   greet: () => {
+//     console.log(this);
+//     console.log(`Hey ${this.firstName}`);
+//   },
+//   // greet: function () {
+//   //   console.log(this);
+//   //   console.log(`Hey ${this.firstName}`);
+//   // },
+// };
+
+// elmar.greet();
+
+// // And the reason is exactly the one that I mentioned
+// // in the last lecture,
+// // which is the fact that an arrow function
+// // does not get its own this keyword,
+// // it will simply use the this keyword from its surroundings.
+// // So in other words, its parents this keyword,
+// // and the parent scope of this greet method
+// // is the global scope. Okay?
+
+// // So from this example, the big takeaway
+// // is that as a best practice,
+// // you should never ever use an arrow function as a method.
+// // And in my opinion, that's even true if you're not even using
+// // the this keyword in a particular method.
+// // Because if you have this rule of never using an arrow
+// // function as a method, then you never have to think about
+// // which type of function you should use
+// // You will always just use a normal function expression,
+
+// elmar.calcAge();
+
+// // Now some people consider that this is a bug in JavaScript
+// // but in my opinion, it's not really.
+// // It's just how the this keyword works.
+// // It's a clear rule that a regular function call
+// // has the this keyword set to undefined.
+// // And so that's just what is happening here.
+// // Now there are two solutions to this problem.
+// // The first solution is to use an extra variable
+// // that we usually call self.
+// // So outside of the function, let's say self
+// // and then we set that to this.
+// // Because here we are still outside
+// // of this isMillennial function.
+// // And so here, we still have access to this keyword
+// // set to Elmar. Right?
+
+// // So basically an arrow function inherits the this keyword
+// // from the parent scope.
+
+// // So in the video about execution context,
+// // and the call stack,
+// // we learned that functions also get access
+// // to an arguments keyword.
+// // So not just the this keyword, but also an arguments keyword.
+// // Now, just like the this keyword, the arguments keyword
+// // is only available in regular functions.
+// // So let's create another function here.
+// // So first an expression.
+
+// //arguments keyword
+// const addExpr = function (a, b) {
+//   console.log(arguments);
+//   return a + b;
+// };
+
+// addExpr(2, 5);
+// addExpr(2, 5, 8, 12);
+
+// var addArrow = (a, b) => {
+//   console.log(arguments);
+//   return a + b;
+// };
+
+// addArrow(2, 5, 8, 12);
+
+// // but then we get an error.
+// // So arguments is not defined. All right.
+// // So this was simply just to show you
+// // that the arguments keyword exists,
+// // but that it only exists in regular functions.
+// // So in function expressions like this,
+// // but also in function declarations,
+// // but not in an arrow function.
+// // But anyway, the arguments keyword is not that important
+// // in modern JavaScript anymore,
+
+////////////////////////////////////////////////////////////////////
+// Primitives vs. Objects (Primitive vs. Reference Types)
+////////////////////////////////////////////////////////////////////
+
+let age = 30;
+let oldAge = age;
+age = 31;
+console.log(age);
+console.log(oldAge);
+
+const me = {
+  name: 'Elmar',
+  age: 30,
 };
 
-elmar.greet();
+const friend = me;
+friend.age = 27;
+console.log('Friend:', friend);
+console.log('Me:', me);
 
-// And the reason is exactly the one that I mentioned
-// in the last lecture,
-// which is the fact that an arrow function
-// does not get its own this keyword,
-// it will simply use the this keyword from its surroundings.
-// So in other words, its parents this keyword,
-// and the parent scope of this greet method
-// is the global scope. Okay?
+// Now, when we're talking about memory and memory management,
+// it's usual to call primitives, primitive types
+// and objects reference types because of the different way
+// in which they are stored in memory.
+// Next, we need to remember about the JavaScript engine.
+// So the engine has two components, the call stack,
+// where functions are executed and to heap where objects
+// are stored in memory.
+// And that's right, all of objects,
+// or in other words, reference types
+// will get stored right in the memory heap.
+// And I mentioned that when we first talked about the engine,
+// but now you will finally learn how that actually works.
+// On the other hand, primitives or primitive types
+// are stored in the call stack.
+// And with that, I mean that primitive types
+// are stored in the execution contexts
+// in which they are declared.
+// But for the sake of simplicity,
+// let's ignore that detail now.
+// And simply say that primitive types
+// are stored in a call stack
+// because that's where execution context run.
 
-// So from this example, the big takeaway
-// is that as a best practice,
-// you should never ever use an arrow function as a method.
-// And in my opinion, that's even true if you're not even using
-// the this keyword in a particular method.
-// Because if you have this rule of never using an arrow
-// function as a method, then you never have to think about
-// which type of function you should use
-// You will always just use a normal function expression,
+// Please see pdf lecture
 
-elmar.calcAge();
-
-// Now some people consider that this is a bug in JavaScript
-// but in my opinion, it's not really.
-// It's just how the this keyword works.
-// It's a clear rule that a regular function call
-// has the this keyword set to undefined.
-// And so that's just what is happening here.
-// Now there are two solutions to this problem.
-// The first solution is to use an extra variable
-// that we usually call self.
-// So outside of the function, let's say self
-// and then we set that to this.
-// Because here we are still outside
-// of this isMillennial function.
-// And so here, we still have access to this keyword
-// set to Elmar. Right?
-
-// So basically an arrow function inherits the this keyword
-// from the parent scope.
-
-// So in the video about execution context,
-// and the call stack,
-// we learned that functions also get access
-// to an arguments keyword.
-// So not just the this keyword, but also an arguments keyword.
-// Now, just like the this keyword, the arguments keyword
-// is only available in regular functions.
-// So let's create another function here.
-// So first an expression.
-
-//arguments keyword
-const addExpr = function (a, b) {
-  console.log(arguments);
-  return a + b;
-};
-
-addExpr(2, 5);
-addExpr(2, 5, 8, 12);
-
-var addArrow = (a, b) => {
-  console.log(arguments);
-  return a + b;
-};
-
-addArrow(2, 5, 8, 12);
-
-// but then we get an error.
-// So arguments is not defined. All right.
-// So this was simply just to show you
-// that the arguments keyword exists,
-// but that it only exists in regular functions.
-// So in function expressions like this,
-// but also in function declarations,
-// but not in an arrow function.
-// But anyway, the arguments keyword is not that important
-// in modern JavaScript anymore,
+// because we're actually not changing the value in memory
+// for the Friend identifier, it is still D30F.
+// So the reference to the object.
+// All we did was to change the value in the heap,
+// and that's not a problem.
+// So it's a misconception that all variables declared
+// with const are immutable.
+// In fact, that is only true for primitive values,
+// but not for reference values.
