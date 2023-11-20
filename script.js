@@ -321,54 +321,146 @@
 // Primitives vs. Objects (Primitive vs. Reference Types)
 ////////////////////////////////////////////////////////////////////
 
-let age = 30;
-let oldAge = age;
-age = 31;
-console.log(age);
-console.log(oldAge);
+// let age = 30;
+// let oldAge = age;
+// age = 31;
+// console.log(age);
+// console.log(oldAge);
 
-const me = {
-  name: 'Elmar',
-  age: 30,
+// const me = {
+//   name: 'Elmar',
+//   age: 30,
+// };
+
+// const friend = me;
+// friend.age = 27;
+// console.log('Friend:', friend);
+// console.log('Me:', me);
+
+// // Now, when we're talking about memory and memory management,
+// // it's usual to call primitives, primitive types
+// // and objects reference types because of the different way
+// // in which they are stored in memory.
+// // Next, we need to remember about the JavaScript engine.
+// // So the engine has two components, the call stack,
+// // where functions are executed and to heap where objects
+// // are stored in memory.
+// // And that's right, all of objects,
+// // or in other words, reference types
+// // will get stored right in the memory heap.
+// // And I mentioned that when we first talked about the engine,
+// // but now you will finally learn how that actually works.
+// // On the other hand, primitives or primitive types
+// // are stored in the call stack.
+// // And with that, I mean that primitive types
+// // are stored in the execution contexts
+// // in which they are declared.
+// // But for the sake of simplicity,
+// // let's ignore that detail now.
+// // And simply say that primitive types
+// // are stored in a call stack
+// // because that's where execution context run.
+
+// // Please see pdf lecture
+
+// // because we're actually not changing the value in memory
+// // for the Friend identifier, it is still D30F.
+// // So the reference to the object.
+// // All we did was to change the value in the heap,
+// // and that's not a problem.
+// // So it's a misconception that all variables declared
+// // with const are immutable.
+// // In fact, that is only true for primitive values,
+// // but not for reference values.
+
+//////////////////////////////////////////////////////////////////////////
+// Primitives vs. Objects in Practice
+//////////////////////////////////////////////////////////////////////////
+
+// Primitive types
+let lastName = 'Williams';
+let oldLastname = lastName;
+lastName = 'Davis';
+console.log(lastName);
+console.log(oldLastname);
+
+// reference types
+const jessica = {
+  firstName: 'Jessica',
+  lastName: 'Williams',
+  age: 27,
 };
 
-const friend = me;
-friend.age = 27;
-console.log('Friend:', friend);
-console.log('Me:', me);
+const marriedJessica = jessica;
+marriedJessica.lastName = 'Davis';
+console.log('Before marriage:', jessica);
+console.log('After marriage:', marriedJessica);
 
-// Now, when we're talking about memory and memory management,
-// it's usual to call primitives, primitive types
-// and objects reference types because of the different way
-// in which they are stored in memory.
-// Next, we need to remember about the JavaScript engine.
-// So the engine has two components, the call stack,
-// where functions are executed and to heap where objects
-// are stored in memory.
-// And that's right, all of objects,
-// or in other words, reference types
-// will get stored right in the memory heap.
-// And I mentioned that when we first talked about the engine,
-// but now you will finally learn how that actually works.
-// On the other hand, primitives or primitive types
-// are stored in the call stack.
-// And with that, I mean that primitive types
-// are stored in the execution contexts
-// in which they are declared.
-// But for the sake of simplicity,
-// let's ignore that detail now.
-// And simply say that primitive types
-// are stored in a call stack
-// because that's where execution context run.
+// And const is supposed to be for constants.
+// So, for things that we cannot change.
+// However, what actually needs to be constant
+// is the value in the stack.
+// And in this deck, the value only holds the reference,
+// which we are not actually changing.
 
-// Please see pdf lecture
+// marriedJessica = {}; //this will not work for const.
 
-// because we're actually not changing the value in memory
-// for the Friend identifier, it is still D30F.
-// So the reference to the object.
-// All we did was to change the value in the heap,
-// and that's not a problem.
-// So it's a misconception that all variables declared
-// with const are immutable.
-// In fact, that is only true for primitive values,
-// but not for reference values.
+//copying objects
+// So, let's say, Jessica2.
+// And so now, if we really wanted to copy this object,
+// we could use a function called object.assign.
+// And what this function does
+// is to essentially merge two objects
+// and then return a new one.
+// So, we could do this,
+// object.assign.
+// And then again, we can use this function
+// to merge two objects.
+// And so, what we can do
+// is to simply merge an empty new object
+// with Jessica2.
+// And this will then create a completely new object
+// where all the properties are really copied.
+
+const jessica2 = {
+  firstName: 'Jessica',
+  lastName: 'Williams',
+  age: 27,
+  family: ['Alice', 'Bob'],
+};
+
+const jessicaCopy = Object.assign({}, jessica2);
+jessicaCopy.lastName = 'Davis';
+console.log('Before marriage:', jessica2);
+console.log('After marriage:', jessicaCopy);
+
+// However, there is still a problem
+// because using this technique of object.assign
+// only works on the first level.
+// Or in other words, if we have an object inside the object,
+// then this inner object will actually still be the same.
+// So, it will still point to the same place in memory.
+// And that's why we say that this object.assign
+// only creates a shallow copy
+// and not a deep clone which is what we would like to have.
+// So, again, a shallow copy will only copy the properties
+// in the first level while a deep clone would copy everything.
+
+jessicaCopy.family.push('Mary');
+jessicaCopy.family.push('John');
+console.log('Before marriage:', jessica2);
+console.log('After marriage:', jessicaCopy);
+
+// So in essence, both the objects, Jessica2 and JessicaCopy
+// have a property called family,
+// which points at the same object in the memory heap,
+// and that object is, of course, this array.
+// And so, when we change the array in one of them,
+// it's also gonna be changed in the other one.
+// Now, a deep clone is what we would need here,
+// but it is not easy to achieve,
+// and it would actually be beyond the scope of this video
+// to learn how to create a deep clone.
+// Usually, we do something like this
+// which is like really complex
+// using an external library, for example, like Lo-Dash,
